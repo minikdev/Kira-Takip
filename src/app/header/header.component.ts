@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+import { NavController } from '@ionic/angular'
 
 @Component({
   selector: 'app-header',
@@ -6,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-
-  constructor() { }
+  constructor(private router: Router, private navCtrl: NavController) {}
 
   ngOnInit() {}
 
+  onHirers() {
+    this.router.navigate(['hirers'])
+  }
+  onHouses() {
+    this.navCtrl.navigateBack('houses')
+  }
 }

@@ -1,1 +1,24 @@
-<h4>Headeer</h4>
+<!-- <ion-toolbar>
+  <ion-segment value="all">
+    <ion-segment-button value="all" (click)="onHouses()">
+      Evler
+    </ion-segment-button>
+    <ion-segment-button value="favorites" (click)="onHirers()">
+      Kiracılar
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar> -->
+
+<ion-tabs>
+  <ion-tab-bar slot="top" color="primary">
+    <ion-tab-button (click)="onHouses()">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Evler</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button (click)="onHirers()">
+      <ion-icon name="person"></ion-icon>
+      <ion-label>Kiracılar</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

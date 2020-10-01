@@ -1,3 +1,6 @@
-<p>
-  houses-table works!
-</p>
+<router-outlet></router-outlet>
+
+<p>houses-table works!</p>
+<ion-button [routerLink]="['/', 'houses', 'new']">new</ion-button>
+<ion-button [routerLink]="['/', 'houses', '0', 'edit']">0/edit</ion-button>
+<ion-button [routerLink]="['/', 'houses', '0']">0</ion-button>

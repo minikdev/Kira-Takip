@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
+import { HirerDetailComponent } from './hirer-detail/hirer-detail.component'
 import { HirersPage } from './hirers.page'
 
 const routes: Routes = [
@@ -10,10 +11,12 @@ const routes: Routes = [
   },
   {
     path: ':hirerId',
-    loadChildren: () =>
-      import('./hirer-profile/hirer-profile.module').then(
-        (m) => m.HirerProfilePageModule
-      ),
+    component: HirerDetailComponent,
+    children: [
+      {
+        path: '',
+      },
+    ],
   },
 ]
 
