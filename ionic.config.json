@@ -1,0 +1,7 @@
+{
+  "name": "Kira-Takip",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
