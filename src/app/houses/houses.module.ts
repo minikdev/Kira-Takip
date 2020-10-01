@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { IonicModule } from '@ionic/angular'
 
@@ -12,8 +12,17 @@ import { HousesTableComponent } from './houses-table/houses-table.component'
 import { HouseDetailComponent } from './house-detail/house-detail.component'
 import { HouseEditComponent } from './house-edit/house-edit.component'
 
+import { NgxDatatableModule } from '@swimlane/ngx-datatable'
+
 @NgModule({
-  imports: [CommonModule, FormsModule, IonicModule, HousesPageRoutingModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    HousesPageRoutingModule,
+    NgxDatatableModule,
+    ReactiveFormsModule,
+  ],
   declarations: [
     HousesPage,
     HeaderComponent,

@@ -1,3 +1,27 @@
-<p>
-  house-detail works!
-</p>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>{{ house.name }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col>Adres: {{ house.address }}</ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col
+          >Kiracı: {{ house.hirer.name + ' ' + house.hirer.surname }}</ion-col
+        >
+      </ion-row>
+      <ion-row>
+        <ion-col>Kira: {{ house.rentAmount }}</ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCloseCard()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+      <ion-button (click)="onEdit()">Düzenle</ion-button>
+    </ion-buttons>
+  </ion-card-content>
+</ion-card>

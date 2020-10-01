@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { ActivatedRoute, Router, Params } from '@angular/router'
+import { Subscription } from 'rxjs'
+import { Hirer } from 'src/app/hirers/hirer.model'
+import { HirersService } from 'src/app/hirers/hirers.service'
+import { House } from '../house.model'
+import { HousesService } from '../houses.service'
 
 @Component({
   selector: 'app-house-edit',
@@ -6,9 +13,74 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./house-edit.component.scss'],
 })
 export class HouseEditComponent implements OnInit {
+  house: House
+  houseId: number
+  subs: Subscription
+  houseEditForm: FormGroup
+  hirersList: Hirer[]
+  editMode: boolean = false
+  constructor(
+    private route: ActivatedRoute,
+    private housesService: HousesService,
+    private router: Router,
+    private hirersService: HirersService
+  ) {}
 
-  constructor() { }
+  ngOnInit(): void {
+    // this.subs = this.route.paramMap.subscribe((paramMap) => {
+    //   if (paramMap.has('houseId')) {
+    //     this.editMode = false
+    //     this.houseId = +paramMap.get('houseId')
+    //     this.house = this.housesService.getHouseById(this.houseId)
+    //   } else {
+    //     this.editMode = true
+    //   }
+    // })
 
-  ngOnInit() {}
+    // this.hirersList = this.hirersService.getHirers()
+    this.route.paramMap.subscribe((parammap) => {
+      this.houseId = +parammap.get('houseId')
+      this.editMode = parammap.get('houseId') != null
+      this.house = this.housesService.getHouseById(this.houseId)
+    })
+    this.hirersList = this.hirersService.getHirers()
+    this.initForm()
+  }
 
+  onCloseCard() {
+    this.router.navigate(['houses'])
+  }
+  onSubmit() {
+    this.housesService.updateHouse(this.house, this.houseEditForm.value)
+    this.onCloseCard()
+  }
+
+  initForm() {
+    if (this.editMode) {
+      this.houseEditForm = new FormGroup({
+        name: new FormControl(this.house.name, [Validators.required]),
+        address: new FormControl(this.house.address, Validators.required),
+        rentAmount: new FormControl(this.house.rentAmount, [
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/),
+        ]),
+        hirer: new FormControl(null, Validators.required),
+      })
+      console.log('edit moddayız')
+    } else {
+      this.houseEditForm = new FormGroup({
+        name: new FormControl(null, [Validators.required]),
+        address: new FormControl(null, Validators.required),
+        rentAmount: new FormControl(null, [
+          Validators.required,
+          Validators.pattern(/^[1-9]+[0-9]*$/),
+        ]),
+        hirer: new FormControl(null, Validators.required),
+      })
+      console.log('edit mod değiliz')
+    }
+  }
+  getHirerController() {
+    return this.houseEditForm.get('hirer')
+  }
 }

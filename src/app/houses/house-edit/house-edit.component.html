@@ -1,3 +1,52 @@
-<p>
-  house-edit works!
-</p>
+<ion-card>
+  <form (ngSubmit)="onSubmit()" [formGroup]="houseEditForm">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-input formControlName="name" placeholder="Ad"></ion-input>
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col
+            ><ion-textarea
+              formControlName="address"
+              placeholder="Adres"
+            ></ion-textarea
+          ></ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col
+            ><ion-select placeholder="Kiracılar" formControlName="hirer">
+              <ion-select-option
+                name="hirer"
+                ngDefaultControl
+                *ngFor="let hirer of hirersList"
+                [value]="hirer.id"
+                >{{ hirer.name }}</ion-select-option
+              >
+            </ion-select>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-input
+              type="number"
+              placeholder="Kira"
+              formControlName="rentAmount"
+            ></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-buttons slot="end">
+        <ion-button mat-button type="submit" [disabled]="!houseEditForm.valid">
+          Tamam
+        </ion-button>
+        <ion-button mat-button type="button" (click)="onCloseCard()"
+          >Vazgeç</ion-button
+        >
+      </ion-buttons>
+    </ion-card-content>
+  </form>
+</ion-card>
