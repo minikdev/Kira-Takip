@@ -56,7 +56,7 @@ export class NewRentComponent implements OnInit, OnDestroy {
       this.hirerId,
       this.newRentForm.value['paidAmount'] - this.rentAmount
     )
-    this.router.navigate(['hirers', this.hirerId])
+    this.router.navigate(['tabs', 'hirers', this.hirerId])
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe()

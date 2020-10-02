@@ -51,7 +51,7 @@ export class HouseEditComponent implements OnInit, OnDestroy {
   }
 
   onCloseCard() {
-    this.router.navigate(['houses'])
+    this.router.navigate(['tabs', 'houses'])
   }
   onSubmit() {
     if (this.editMode) {

@@ -35,6 +35,6 @@ export class NewHirerComponent implements OnInit {
     this.onCloseCard()
   }
   onCloseCard() {
-    this.router.navigate(['hirers'])
+    this.router.navigate(['tabs', 'hirers'])
   }
 }

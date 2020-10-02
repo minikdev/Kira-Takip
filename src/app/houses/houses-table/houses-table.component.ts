@@ -21,10 +21,10 @@ export class HousesTableComponent implements OnInit, OnDestroy {
     })
   }
   onSelectHouse(id: number) {
-    this.router.navigate(['houses', id])
+    this.router.navigate(['tabs', 'houses', id])
   }
   onNewHouse() {
-    this.router.navigate(['houses', 'new'])
+    this.router.navigate(['tabs', 'houses', 'new'])
   }
   onDeleteHouse(house: House) {
     this.housesService.deleteHouse(house)

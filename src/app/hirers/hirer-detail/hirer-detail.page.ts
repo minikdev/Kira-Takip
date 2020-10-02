@@ -38,10 +38,10 @@ export class HirerDetailPage implements OnInit {
   }
 
   onCloseCard() {
-    this.router.navigate(['hirers'])
+    this.router.navigate(['tabs', 'hirers'])
   }
   onEdit() {
-    this.router.navigate(['hirers', this.hirerId, 'edit'])
+    this.router.navigate(['tabs', 'hirers', this.hirerId, 'edit'])
   }
   ngOnDestroy() {
     this.subscription.unsubscribe()

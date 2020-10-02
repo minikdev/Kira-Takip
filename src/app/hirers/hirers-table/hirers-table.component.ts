@@ -25,14 +25,16 @@ export class HirersTableComponent implements OnInit {
     })
   }
   onNewHirer() {
-    this.router.navigate(['hirers', 'new'])
+    this.router.navigate(['tabs', 'hirers', 'new'])
   }
   onDeleteHirer(hirer: Hirer) {
     this.hirersService.deleteHirer(hirer)
   }
 
   onSelectHirer(hirer: Hirer) {
-    this.router.navigate(['hirers', hirer.id], { state: { hirerId: hirer.id } })
+    this.router.navigate(['tabs', 'hirers', hirer.id], {
+      state: { hirerId: hirer.id },
+    })
   }
 
   ngOnDestroy(): void {

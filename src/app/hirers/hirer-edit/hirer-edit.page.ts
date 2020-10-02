@@ -33,7 +33,7 @@ export class HirerEditPage implements OnInit {
   }
 
   onCloseCard() {
-    this.router.navigate(['hirers', this.hirerId])
+    this.router.navigate(['tabs', 'hirers', this.hirerId])
   }
   onSubmit() {
     this.hirersService.updateHirer(this.hirer, this.hirerEditForm.value)
