@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { FormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 
 import { IonicModule } from '@ionic/angular'
 
@@ -16,8 +16,9 @@ import { RentTableComponent } from './rents/rents-table/rent-table.component'
     FormsModule,
     IonicModule,
     HirerDetailPageRoutingModule,
+    ReactiveFormsModule,
   ],
   declarations: [HirerDetailPage, RentTableComponent, NewRentComponent],
-  exports: [RentTableComponent],
+  exports: [RentTableComponent, NewRentComponent],
 })
 export class HirerDetailPageModule {}

@@ -1,3 +1,34 @@
-<p>
-  new-rent works!
-</p>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Yeni Kira:</ion-card-title>
+  </ion-card-header>
+  <form (ngSubmit)="onSubmit()" [formGroup]="newRentForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col
+          ><ion-input
+            formControlName="paidAmount"
+            type="number"
+            placeholder="Ödenen Miktar"
+          ></ion-input>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-datetime
+              displayFormat="MMMM DD YYYY"
+              placeholder="Select Date"
+              formControlName="payDate"
+            ></ion-datetime> </ion-item
+        ></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-buttons>
+          <ion-button type="submit" [disabled]="!newRentForm.valid">
+            Tamam</ion-button
+          >
+          <ion-button [routerLink]="['../']" type="button"> Vazgeç</ion-button>
+        </ion-buttons>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-card>
