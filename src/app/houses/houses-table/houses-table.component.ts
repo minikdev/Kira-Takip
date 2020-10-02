@@ -13,12 +13,19 @@ export class HousesTableComponent implements OnInit, OnDestroy {
   houses: House[]
   subscription: Subscription
   constructor(private housesService: HousesService, private router: Router) {}
-
+  newHouseSubscription: Subscription
   ngOnInit() {
     this.houses = this.housesService.getHouses()
     this.subscription = this.housesService.housesChanged.subscribe((houses) => {
       this.houses = houses
     })
+    this.newHouseSubscription = this.housesService.onNewHouse.subscribe(
+      (trueorFalse) => {
+        if (trueorFalse) {
+          this.onNewHouse()
+        }
+      }
+    )
   }
   onSelectHouse(id: number) {
     this.router.navigate(['tabs', 'houses', id])
@@ -31,5 +38,6 @@ export class HousesTableComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     this.subscription.unsubscribe()
+    this.newHouseSubscription.unsubscribe()
   }
 }

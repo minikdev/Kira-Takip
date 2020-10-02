@@ -13,7 +13,7 @@ export class RentsService {
     new Rent(3, 2, 2, 2000, new Date('2019-01-16')),
     new Rent(4, 3, 3, 3000, new Date('2019-01-16')),
   ]
-
+  onNewRent = new Subject<boolean>()
   rentsChanged = new Subject<Rent[]>()
   getRents() {
     return [...this.rents]

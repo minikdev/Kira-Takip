@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { HousesService } from './houses.service'
 
 @Component({
   selector: 'app-houses',
@@ -6,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./houses.page.scss'],
 })
 export class HousesPage implements OnInit {
+  constructor(private housesService: HousesService) {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  onNewHouse() {
+    this.housesService.onNewHouse.next(true)
   }
-
 }

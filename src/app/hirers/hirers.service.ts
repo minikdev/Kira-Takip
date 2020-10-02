@@ -7,6 +7,7 @@ import { Hirer } from './hirer.model'
 })
 export class HirersService {
   hirersChanged = new Subject<Hirer[]>()
+  onNewHirer = new Subject<boolean>()
   private hirers: Hirer[] = [
     new Hirer(0, '123123', 'Minik', 'Engin', '5448881899', undefined, 0),
     new Hirer(1, '12312312123', 'Minik2', 'Engin', '5448881899', undefined, 1),
@@ -14,6 +15,7 @@ export class HirersService {
     new Hirer(3, '12312312123', 'Minik4', 'Engin', '5448881899', undefined, 3),
     new Hirer(4, '12323', 'Minik5', 'Engin', '5448881899'),
   ]
+
   constructor() {}
   getHirers() {
     return this.hirers.slice()

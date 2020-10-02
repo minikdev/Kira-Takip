@@ -10,6 +10,7 @@ import { HirersService } from '../hirers.service'
 })
 export class HirersTableComponent implements OnInit {
   subscription: Subscription
+  newHirerSubscription: Subscription
   hirers: Hirer[] = []
   constructor(
     private hirersService: HirersService,
@@ -23,6 +24,13 @@ export class HirersTableComponent implements OnInit {
     this.subscription = this.hirersService.hirersChanged.subscribe((hirers) => {
       this.hirers = hirers
     })
+    this.newHirerSubscription = this.hirersService.onNewHirer.subscribe(
+      (trueOrFalse) => {
+        if (trueOrFalse) {
+          this.onNewHirer()
+        }
+      }
+    )
   }
   onNewHirer() {
     this.router.navigate(['tabs', 'hirers', 'new'])

@@ -29,8 +29,6 @@ export class NewHirerComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.newHirerForm.value)
-
     this.hirersService.newHirer(this.newHirerForm.value)
     this.onCloseCard()
   }

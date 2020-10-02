@@ -27,17 +27,6 @@ export class HouseEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // this.subs = this.route.paramMap.subscribe((paramMap) => {
-    //   if (paramMap.has('houseId')) {
-    //     this.editMode = false
-    //     this.houseId = +paramMap.get('houseId')
-    //     this.house = this.housesService.getHouseById(this.houseId)
-    //   } else {
-    //     this.editMode = true
-    //   }
-    // })
-
-    // this.hirersList = this.hirersService.getHirers()
     this.route.paramMap.subscribe((parammap) => {
       this.houseId = +parammap.get('houseId')
       this.editMode = parammap.get('houseId') != null
@@ -66,7 +55,6 @@ export class HouseEditComponent implements OnInit, OnDestroy {
         +this.houseEditForm.value['hirer'],
         this.housesService.getMaxIdOfHouses() + 1
       )
-      console.log(this.houseEditForm.value)
     }
     this.onCloseCard()
   }
@@ -82,7 +70,6 @@ export class HouseEditComponent implements OnInit, OnDestroy {
         ]),
         hirer: new FormControl(null, Validators.required),
       })
-      console.log('edit moddayız')
     } else {
       this.houseEditForm = new FormGroup({
         name: new FormControl(null, [Validators.required]),

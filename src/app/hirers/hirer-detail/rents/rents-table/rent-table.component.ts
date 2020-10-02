@@ -16,6 +16,7 @@ export class RentTableComponent implements OnInit {
   hirerId: number
   hirer: Hirer
   routeSubscription: Subscription
+  newRentSubscription: Subscription
   rentServiceSubscription: Subscription
   houseName: string = ''
   rents: Rent[] = []
@@ -41,6 +42,13 @@ export class RentTableComponent implements OnInit {
         this.rents = rents
       }
     )
+    this.newRentSubscription = this.rentsService.onNewRent.subscribe(
+      (trueOrFalse) => {
+        if (trueOrFalse) {
+          this.onNewRent()
+        }
+      }
+    )
   }
 
   onDeleteRent(rent: Rent) {
@@ -53,5 +61,6 @@ export class RentTableComponent implements OnInit {
   ngOnDestroy() {
     this.rentServiceSubscription.unsubscribe()
     this.routeSubscription.unsubscribe()
+    this.newRentSubscription.unsubscribe()
   }
 }

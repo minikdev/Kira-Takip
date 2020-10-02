@@ -10,6 +10,7 @@ export class HousesService {
   hirers: Hirer[]
   private houses: House[]
   housesChanged = new Subject<House[]>()
+  onNewHouse = new Subject<boolean>()
   getHouses() {
     return [...this.houses]
   }
