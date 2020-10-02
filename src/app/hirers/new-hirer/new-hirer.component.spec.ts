@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { HirerEditComponent } from './hirer-edit.component';
+import { NewHirerComponent } from './new-hirer.component';
 
-describe('HirerEditComponent', () => {
-  let component: HirerEditComponent;
-  let fixture: ComponentFixture<HirerEditComponent>;
+describe('NewHirerComponent', () => {
+  let component: NewHirerComponent;
+  let fixture: ComponentFixture<NewHirerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HirerEditComponent ],
+      declarations: [ NewHirerComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HirerEditComponent);
+    fixture = TestBed.createComponent(NewHirerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

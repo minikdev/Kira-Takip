@@ -1,2 +1,30 @@
-<p>hirerstable</p>
-<ion-button [routerLink]="['/', 'hirers', '0']"></ion-button>
+<ion-content>
+  <router-outlet></router-outlet>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1"
+        ><ion-icon name="add-circle-outline" (click)="onNewHirer()"></ion-icon
+      ></ion-col>
+      <ion-col size="2">Ad</ion-col>
+      <ion-col size="5">T.C </ion-col>
+      <ion-col size="4"> Telefon</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let hirer of hirers"
+      ><ion-col size="1"
+        ><ion-icon
+          name="trash-bin-outline"
+          (click)="onDeleteHirer(hirer)"
+        ></ion-icon
+      ></ion-col>
+      <ion-col size="2" (click)="onSelectHirer(hirer)">{{
+        hirer.name + ' ' + hirer.surname
+      }}</ion-col>
+      <ion-col size="5" (click)="onSelectHirer(hirer)">{{
+        hirer.tcNo
+      }}</ion-col>
+      <ion-col size="4" (click)="onSelectHirer(hirer)">{{
+        hirer.phone
+      }}</ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

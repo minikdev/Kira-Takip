@@ -5,6 +5,7 @@ export class Hirer {
     public name: string,
     public surname: string,
     public phone: string,
-    public debt?: number
+    public debt?: number,
+    public houseId?: number
   ) {}
 }

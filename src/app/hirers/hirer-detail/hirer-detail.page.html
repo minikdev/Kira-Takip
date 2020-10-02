@@ -1,0 +1,28 @@
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title> {{hirer.name+" "+hirer.surname}} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>T.C: {{hirer.tcNo}} </ion-col>
+          <ion-col>Telefon: {{hirer.phone}} </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>Kira Bedeli:{{ rentAmount}} </ion-col>
+          <ion-col>Borç:{{ hirer.debt?hirer.debt : 0}} </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-buttons slot="end">
+        <ion-button (click)="onCloseCard()">
+          <ion-icon name="close"></ion-icon>
+        </ion-button>
+        <ion-button (click)="onEdit()">Düzenle</ion-button>
+      </ion-buttons>
+    </ion-card-content>
+  </ion-card>
+  <router-outlet></router-outlet>
+  <app-rent-table></app-rent-table>
+</ion-content>

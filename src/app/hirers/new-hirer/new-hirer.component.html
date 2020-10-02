@@ -1,0 +1,62 @@
+<ion-card>
+  <form (ngSubmit)="onSubmit()" [formGroup]="newHirerForm">
+    <ion-card-header>
+      <ion-card-title style="display: flex">
+        <ion-input
+          formControlName="name"
+          type="text"
+          id="name"
+          placeholder="Ad"
+        ></ion-input>
+        <ion-input
+          formControlName="surname"
+          type="text"
+          id="surname"
+          placeholder="Soyad"
+        ></ion-input
+      ></ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col
+            ><ion-label>T.C:</ion-label>
+            <ion-input
+              formControlName="tcNo"
+              id="tcNo"
+              type="text"
+              placeholder="T.C"
+            ></ion-input>
+          </ion-col>
+          <ion-col
+            ><ion-label>Telefon:</ion-label>
+            <ion-input
+              formControlName="phone"
+              id="phone"
+              type="text"
+              placeholder="Telefon"
+            ></ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label>Borç:</ion-label>
+            <ion-input
+              formControlName="debt"
+              id="debt"
+              type="number"
+              placeholder="Borç"
+            ></ion-input
+          ></ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-buttons slot="end">
+        <ion-button type="submit" [disabled]="!newHirerForm.valid">
+          Tamam</ion-button
+        >
+        <ion-button (click)="onCloseCard()" type="button"> Vazgeç </ion-button>
+      </ion-buttons>
+    </ion-card-content>
+  </form>
+</ion-card>

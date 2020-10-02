@@ -8,16 +8,25 @@ import { Hirer } from './hirer.model'
 export class HirersService {
   hirersChanged = new Subject<Hirer[]>()
   private hirers: Hirer[] = [
-    new Hirer(0, '123123', 'Minik', 'Engin', '5448881899'),
-    new Hirer(1, '12312312123', 'Minik2', 'Engin', '5448881899'),
-    new Hirer(2, '1231241243', 'Minik3', 'Engin', '5448881899'),
-    new Hirer(3, '12312312123', 'Minik4', 'Engin', '5448881899'),
+    new Hirer(0, '123123', 'Minik', 'Engin', '5448881899', undefined, 0),
+    new Hirer(1, '12312312123', 'Minik2', 'Engin', '5448881899', undefined, 1),
+    new Hirer(2, '1231241243', 'Minik3', 'Engin', '5448881899', undefined, 2),
+    new Hirer(3, '12312312123', 'Minik4', 'Engin', '5448881899', undefined, 3),
+    new Hirer(4, '12323', 'Minik5', 'Engin', '5448881899'),
   ]
   constructor() {}
   getHirers() {
     return this.hirers.slice()
   }
-
+  getAvailableHirers(houseId: number) {
+    let availableHirers: Hirer[] = []
+    for (const hirer of this.hirers) {
+      if (hirer.houseId === undefined || hirer.houseId === houseId) {
+        availableHirers.push(hirer)
+      }
+    }
+    return availableHirers
+  }
   getHirer(index: number) {
     return this.hirers[index]
   }
@@ -29,7 +38,14 @@ export class HirersService {
     }
     return null
   }
-
+  setHouseOfHirer(hirerId: number, houseId: number) {
+    for (const hirer of this.hirers) {
+      if (hirer.id === hirerId) {
+        hirer.houseId = houseId
+      }
+    }
+    this.sendNewHirers()
+  }
   deleteHirer(hirer: Hirer) {
     var index = this.hirers.indexOf(hirer, 0)
     this.hirers.splice(index, 1)

@@ -12,11 +12,7 @@ import { HousesService } from '../houses.service'
 export class HousesTableComponent implements OnInit, OnDestroy {
   houses: House[]
   subscription: Subscription
-  constructor(
-    private housesService: HousesService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private housesService: HousesService, private router: Router) {}
 
   ngOnInit() {
     this.houses = this.housesService.getHouses()
