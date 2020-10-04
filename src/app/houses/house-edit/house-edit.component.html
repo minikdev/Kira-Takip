@@ -1,4 +1,4 @@
-<ion-card>
+<ion-card *ngIf="!isLoading">
   <form (ngSubmit)="onSubmit()" [formGroup]="houseEditForm">
     <ion-card-header>
       <ion-card-title>

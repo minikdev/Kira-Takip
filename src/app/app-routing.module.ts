@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router'
-import { HeaderComponent } from './header/header.component'
+import { HeaderComponent } from './shared/header/header.component'
 
 const routes: Routes = [
   {
@@ -23,6 +23,11 @@ const routes: Routes = [
           import('./hirers/hirers.module').then((m) => m.HirersPageModule),
       },
     ],
+  },
+  {
+    path: '',
+    redirectTo: 'tabs',
+    pathMatch: 'full',
   },
 ]
 

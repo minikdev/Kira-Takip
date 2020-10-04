@@ -1,67 +1,81 @@
-import { Injectable, OnInit } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { House } from './house.model'
 import { HirersService } from '../hirers/hirers.service'
 import { Hirer } from '../hirers/hirer.model'
-import { Subject } from 'rxjs'
+import { BehaviorSubject, of, Subject } from 'rxjs'
+import { map, switchMap, tap, take } from 'rxjs/operators'
+import { HttpClient } from '@angular/common/http'
+
 @Injectable({
   providedIn: 'root',
 })
 export class HousesService {
   hirers: Hirer[]
-  private houses: House[]
-  housesChanged = new Subject<House[]>()
+  private houses: House[] = []
+  private _Houses = new BehaviorSubject<House[]>([])
   onNewHouse = new Subject<boolean>()
-  getHouses() {
-    return [...this.houses]
+
+  get Houses() {
+    return this._Houses.asObservable()
   }
-  constructor(private hirersService: HirersService) {
+  constructor(private hirersService: HirersService, private http: HttpClient) {
     this.hirers = this.hirersService.getHirers()
-    this.houses = [
-      new House(
-        0,
-        'ev1',
-        'Balıkesir/Bandırma Günaydın Mah. Fevzi Çakmak Cad. Eroğlu Apt. No:32 Daire:8 ',
-        1000,
-        this.hirers[0]
-      ),
-      new House(
-        1,
-        'ev2',
-        'İzmir/Bornova Kazımdirik Mah. 220.Sk Tunçay Apt. No:1/B Daire:7',
-        2000,
-        this.hirers[1]
-      ),
-      new House(2, 'ev3', 'bandırma', 3000, this.hirers[2]),
-      new House(3, 'ev4', 'bandırma', 4000, this.hirers[3]),
-    ]
+  }
+
+  fetchHouses() {
+    // çalıştı
+    return this.http.get('https://parseapi.back4app.com/classes/houses').pipe(
+      take(1),
+      map((data) => {
+        const houses = []
+        data['results'].forEach((e) => {
+          let newHouse = new House(
+            e.objectId,
+            e.name,
+            e.address,
+            e.rentAmount,
+            e.hirerId
+          )
+          houses.push(newHouse)
+        })
+
+        this._Houses.next(houses)
+      })
+    )
   }
 
   getHouse(index: number) {
     return this.houses[index]
   }
 
-  getHouseById(houseId: number) {
-    for (const house of this.houses) {
-      if (houseId === house.id) {
-        return house
-      }
-    }
-    return null
+  getHouseById(houseId: string) {
+    return this.http
+      .get(`https://parseapi.back4app.com/classes/houses/${houseId}`)
+      .pipe(take(1))
   }
 
-  getHouseByHirerId(hirerId: number) {
+  getHouseByHirerId(hirerId: string) {
     for (let index = this.houses.length - 1; index >= 0; index--) {
-      if (hirerId === this.houses[index].hirer.id) {
+      if (hirerId === this.houses[index].hirerId) {
         return this.houses[index]
       }
     }
     return null
   }
 
-  deleteHouse(house: House) {
-    var index = this.houses.indexOf(house, 0)
-    this.houses.splice(index, 1)
-    this.sendNewHouses()
+  deleteHouse(houseId: string) {
+    // çalıştı
+    return this.http
+      .delete(`https://parseapi.back4app.com/classes/houses/${houseId}`)
+      .pipe(
+        switchMap(() => {
+          return this.Houses
+        }),
+        take(1),
+        tap((houses) => {
+          this._Houses.next(houses.filter((h) => h.id !== houseId))
+        })
+      )
   }
 
   updateHouse(
@@ -70,43 +84,71 @@ export class HousesService {
       name: string
       address: string
       rentAmount: number
-      hirer: number
+      hirer: string
     }
   ) {
-    var newHouse = new House(
-      house.id,
-      formValue.name,
-      formValue.address,
-      formValue.rentAmount,
-      this.hirersService.getHirerById(formValue.hirer)
-    )
-    this.houses[this.houses.indexOf(house, 0)] = newHouse
-    this.sendNewHouses()
-  }
+    console.log(house)
 
-  newHouse(formValue) {
-    this.houses.push(
-      new House(
-        this.getMaxIdOfHouses() + 1,
-        formValue.name,
-        formValue.address,
-        formValue.rentAmount,
-        this.hirersService.getHirerById(formValue.hirer)
+    let updatedHouses: House[] = []
+    return this.http
+      .put(`https://parseapi.back4app.com/classes/houses/${house.id}`, {
+        name: formValue.name,
+        address: formValue.address,
+        rentAmount: formValue.rentAmount,
+        hirerId: formValue.hirer,
+      })
+      .pipe(
+        take(1),
+        switchMap(() => {
+          return this.Houses
+        }),
+        take(1),
+        tap((houses) => {
+          const updatedHouseIndex = houses.findIndex((h) => h.id === house.id)
+          updatedHouses = [...houses]
+          updatedHouses[updatedHouseIndex] = new House(
+            house.id,
+            formValue.name,
+            formValue.address,
+            formValue.rentAmount,
+            formValue.hirer
+          )
+          this._Houses.next(updatedHouses)
+        })
       )
-    )
+  }
 
-    this.sendNewHouses()
-  }
-  sendNewHouses() {
-    this.housesChanged.next(this.houses.slice())
-  }
-  getMaxIdOfHouses() {
-    let max: number = -1
-    for (const house of this.houses) {
-      if (max < house.id) {
-        max = house.id
-      }
-    }
-    return max
+  addHouse(formValue: {
+    name: string
+    address: string
+    rentAmount: number
+    hirer: string
+  }) {
+    var id: string = ''
+    return this.http
+      .post('https://parseapi.back4app.com/classes/houses', {
+        name: formValue.name,
+        address: formValue.address,
+        rentAmount: formValue.rentAmount,
+        hirerId: formValue.hirer,
+      })
+      .pipe(
+        take(1),
+        switchMap((respData) => {
+          id = respData['objectId']
+          return this.Houses
+        }),
+        take(1),
+        tap((houses) => {
+          let newHouse = new House(
+            id,
+            formValue.name,
+            formValue.address,
+            formValue.rentAmount,
+            formValue.hirer
+          )
+          this._Houses.next(houses.concat(newHouse))
+        })
+      )
   }
 }

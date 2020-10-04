@@ -14,11 +14,8 @@ export class HousesTableComponent implements OnInit, OnDestroy {
   subscription: Subscription
   constructor(private housesService: HousesService, private router: Router) {}
   newHouseSubscription: Subscription
+  isLoading = false
   ngOnInit() {
-    this.houses = this.housesService.getHouses()
-    this.subscription = this.housesService.housesChanged.subscribe((houses) => {
-      this.houses = houses
-    })
     this.newHouseSubscription = this.housesService.onNewHouse.subscribe(
       (trueorFalse) => {
         if (trueorFalse) {
@@ -26,15 +23,26 @@ export class HousesTableComponent implements OnInit, OnDestroy {
         }
       }
     )
+    this.isLoading = true
+    this.housesService.fetchHouses().subscribe(() => {
+      this.isLoading = false
+    })
+    this.housesService.Houses.subscribe((houses) => {
+      this.houses = houses
+    })
   }
+
   onSelectHouse(id: number) {
     this.router.navigate(['tabs', 'houses', id])
   }
   onNewHouse() {
     this.router.navigate(['tabs', 'houses', 'new'])
   }
-  onDeleteHouse(house: House) {
-    this.housesService.deleteHouse(house)
+  onDeleteHouse(houseId: string) {
+    this.isLoading = true
+    this.housesService.deleteHouse(houseId).subscribe(() => {
+      this.isLoading = false
+    })
   }
   ngOnDestroy() {
     this.subscription.unsubscribe()

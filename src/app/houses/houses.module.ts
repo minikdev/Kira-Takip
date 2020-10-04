@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular'
 import { HousesPageRoutingModule } from './houses-routing.module'
 
 import { HousesPage } from './houses.page'
-import { HeaderComponent } from '../header/header.component'
+import { HeaderComponent } from '../shared/header/header.component'
 import { HousesTableComponent } from './houses-table/houses-table.component'
 import { HouseDetailComponent } from './house-detail/house-detail.component'
 import { HouseEditComponent } from './house-edit/house-edit.component'

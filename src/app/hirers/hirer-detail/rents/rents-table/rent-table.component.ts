@@ -13,7 +13,7 @@ import { RentsService } from '../rents.service'
   styleUrls: ['./rent-table.component.scss'],
 })
 export class RentTableComponent implements OnInit {
-  hirerId: number
+  hirerId: string
   hirer: Hirer
   routeSubscription: Subscription
   newRentSubscription: Subscription
@@ -30,7 +30,7 @@ export class RentTableComponent implements OnInit {
 
   ngOnInit() {
     this.routeSubscription = this.route.paramMap.subscribe((paramMap) => {
-      this.hirerId = +paramMap.get('hirerId')
+      this.hirerId = paramMap.get('hirerId')
       this.hirer = this.hirersService.getHirerById(this.hirerId)
       if (this.housesService.getHouseByHirerId(this.hirerId)) {
         this.houseName = this.housesService.getHouseByHirerId(this.hirerId).name

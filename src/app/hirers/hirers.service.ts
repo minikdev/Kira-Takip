@@ -9,18 +9,42 @@ export class HirersService {
   hirersChanged = new Subject<Hirer[]>()
   onNewHirer = new Subject<boolean>()
   private hirers: Hirer[] = [
-    new Hirer(0, '123123', 'Minik', 'Engin', '5448881899', undefined, 0),
-    new Hirer(1, '12312312123', 'Minik2', 'Engin', '5448881899', undefined, 1),
-    new Hirer(2, '1231241243', 'Minik3', 'Engin', '5448881899', undefined, 2),
-    new Hirer(3, '12312312123', 'Minik4', 'Engin', '5448881899', undefined, 3),
-    new Hirer(4, '12323', 'Minik5', 'Engin', '5448881899'),
+    new Hirer('0', '123123', 'Minik', 'Engin', '5448881899', undefined, '0'),
+    new Hirer(
+      '1',
+      '12312312123',
+      'Minik2',
+      'Engin',
+      '5448881899',
+      undefined,
+      '1'
+    ),
+    new Hirer(
+      '2',
+      '1231241243',
+      'Minik3',
+      'Engin',
+      '5448881899',
+      undefined,
+      '2'
+    ),
+    new Hirer(
+      '3',
+      '12312312123',
+      'Minik4',
+      'Engin',
+      '5448881899',
+      undefined,
+      '3'
+    ),
+    new Hirer('4', '12323', 'Minik5', 'Engin', '5448881899'),
   ]
 
   constructor() {}
   getHirers() {
     return this.hirers.slice()
   }
-  getAvailableHirers(houseId: number) {
+  getAvailableHirers(houseId: string) {
     let availableHirers: Hirer[] = []
     for (const hirer of this.hirers) {
       if (hirer.houseId === undefined || hirer.houseId === houseId) {
@@ -29,10 +53,12 @@ export class HirersService {
     }
     return availableHirers
   }
+
   getHirer(index: number) {
     return this.hirers[index]
   }
-  getHirerById(hirerId: number) {
+
+  getHirerById(hirerId: string) {
     for (const hirer of this.hirers) {
       if (hirerId === hirer.id) {
         return hirer
@@ -40,7 +66,8 @@ export class HirersService {
     }
     return null
   }
-  setHouseOfHirer(hirerId: number, houseId: number) {
+
+  setHouseOfHirer(hirerId: string, houseId: string) {
     for (const hirer of this.hirers) {
       if (hirer.id === hirerId) {
         hirer.houseId = houseId
@@ -84,7 +111,7 @@ export class HirersService {
   }) {
     this.hirers.push(
       new Hirer(
-        this.getMaxId() + 1,
+        Math.random().toString(),
         formValue.tcNo,
         formValue.name,
         formValue.surname,
@@ -98,17 +125,17 @@ export class HirersService {
   sendNewHirers() {
     this.hirersChanged.next([...this.hirers])
   }
-  getMaxId() {
-    let max: number = -1
-    for (const hirer of this.hirers) {
-      if (max < hirer.id) {
-        max = hirer.id
-      }
-    }
-    return max
-  }
+  // getMaxId() {
+  //   let max: number = -1
+  //   for (const hirer of this.hirers) {
+  //     if (max < hirer.id) {
+  //       max = hirer.id
+  //     }
+  //   }
+  //   return max
+  // }
 
-  addDebtToHirer(hirerId: number, debt: number) {
+  addDebtToHirer(hirerId: string, debt: number) {
     for (const hirer of this.hirers) {
       if (hirerId === hirer.id) {
         if (hirer.debt === undefined) {

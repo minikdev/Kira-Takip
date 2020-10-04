@@ -1,11 +1,11 @@
 export class Hirer {
   constructor(
-    public id: number,
+    public id: string,
     public tcNo: string,
     public name: string,
     public surname: string,
     public phone: string,
     public debt?: number,
-    public houseId?: number
+    public houseId?: string
   ) {}
 }

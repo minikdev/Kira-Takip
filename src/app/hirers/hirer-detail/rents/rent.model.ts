@@ -1,8 +1,8 @@
 export class Rent {
   constructor(
-    public id: number,
-    public hirerId: number,
-    public houseId: number,
+    public id: string,
+    public hirerId: string,
+    public houseId: string,
     public paidAmount: number,
     public payDate: Date
   ) {}

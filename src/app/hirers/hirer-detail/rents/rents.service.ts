@@ -7,11 +7,11 @@ import { Rent } from './rent.model'
 })
 export class RentsService {
   private rents: Rent[] = [
-    new Rent(0, 0, 0, 1000, new Date('2019-01-16')),
-    new Rent(1, 1, 1, 1000, new Date('2019-01-16')),
-    new Rent(2, 1, 1, 4000, new Date('2019-01-16')),
-    new Rent(3, 2, 2, 2000, new Date('2019-01-16')),
-    new Rent(4, 3, 3, 3000, new Date('2019-01-16')),
+    new Rent('0', '0', '0', 1000, new Date('2019-01-16')),
+    new Rent('1', '1', '1', 1000, new Date('2019-01-16')),
+    new Rent('2', '1', '1', 4000, new Date('2019-01-16')),
+    new Rent('3', '2', '2', 2000, new Date('2019-01-16')),
+    new Rent('4', '3', '3', 3000, new Date('2019-01-16')),
   ]
   onNewRent = new Subject<boolean>()
   rentsChanged = new Subject<Rent[]>()
@@ -19,7 +19,7 @@ export class RentsService {
     return [...this.rents]
   }
 
-  prepareRentsArray(hirerId: number) {
+  prepareRentsArray(hirerId: string) {
     var individualRents: Rent[] = []
     for (let rent of this.rents) {
       if (rent.hirerId === hirerId) {
@@ -29,13 +29,13 @@ export class RentsService {
     return individualRents
   }
 
-  getIndexOfARent(rent: Rent, hirerId: number): number {
+  getIndexOfARent(rent: Rent, hirerId: string): number {
     var individualRents = this.prepareRentsArray(hirerId)
     return individualRents.indexOf(rent, 0)
   }
   constructor() {}
 
-  deleteRent(rent: Rent, hirerId: number) {
+  deleteRent(rent: Rent, hirerId: string) {
     var index = this.rents.indexOf(rent)
     this.rents.splice(index, 1)
 
@@ -43,13 +43,19 @@ export class RentsService {
   }
 
   addRent(
-    hirerId: number,
-    houseId: number,
+    hirerId: string,
+    houseId: string,
     paidAmount: number,
     payDate: string
   ) {
     this.rents.push(
-      new Rent(5, hirerId, houseId, paidAmount, new Date(payDate))
+      new Rent(
+        Math.random().toString(),
+        hirerId,
+        houseId,
+        paidAmount,
+        new Date(payDate)
+      )
     )
 
     this.sendNewRents(hirerId)

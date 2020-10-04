@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router, Params } from '@angular/router'
 import { Subscription } from 'rxjs'
+import { HirersService } from 'src/app/hirers/hirers.service'
 import { House } from '../house.model'
 import { HousesService } from '../houses.service'
 
@@ -11,12 +12,15 @@ import { HousesService } from '../houses.service'
 })
 export class HouseDetailComponent implements OnInit {
   house: House
-  houseId: number
+  houseId: string
   subs: Subscription
+  hirerName: string = ''
+  isLoading = false
   constructor(
     private route: ActivatedRoute,
     private housesService: HousesService,
-    private router: Router
+    private router: Router,
+    private hirersService: HirersService
   ) {}
 
   ngOnInit(): void {
@@ -24,8 +28,27 @@ export class HouseDetailComponent implements OnInit {
       if (!paramMap.has('houseId')) {
         return
       }
-      this.houseId = +paramMap.get('houseId')
-      this.house = this.housesService.getHouseById(this.houseId)
+
+      this.houseId = paramMap.get('houseId')
+      this.isLoading = true
+      this.housesService.getHouseById(this.houseId).subscribe((house) => {
+        const newHouse = new House(
+          house['objectId'],
+          house['name'],
+          house['address'],
+          house['rentAmount'],
+          house['hirerId']
+        )
+
+        this.house = newHouse
+        if (this.hirersService.getHirerById(this.house.hirerId)) {
+          this.hirerName =
+            this.hirersService.getHirerById(this.house.hirerId).name +
+            ' ' +
+            this.hirersService.getHirerById(this.house.hirerId).surname
+        }
+        this.isLoading = false
+      })
     })
   }
 

@@ -15,7 +15,7 @@ import { RentsService } from '../rents.service'
 export class NewRentComponent implements OnInit, OnDestroy {
   newRentForm: FormGroup
   subscription: Subscription
-  hirerId: number
+  hirerId: string
   house: House
   rentAmount: number
   constructor(
@@ -27,12 +27,14 @@ export class NewRentComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.initForm()
     this.subscription = this.route.parent.paramMap.subscribe((paramMap) => {
-      this.hirerId = +paramMap.get('hirerId')
+      this.hirerId = paramMap.get('hirerId')
       this.house = this.housesService.getHouseByHirerId(this.hirerId)
-      this.rentAmount = this.house.rentAmount
+      if (this.house) {
+        this.rentAmount = this.house.rentAmount
+      }
     })
+    this.initForm()
   }
 
   initForm() {

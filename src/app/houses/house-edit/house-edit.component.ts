@@ -14,11 +14,12 @@ import { HousesService } from '../houses.service'
 })
 export class HouseEditComponent implements OnInit, OnDestroy {
   house: House
-  houseId: number
+  houseId: string
   subs: Subscription
   houseEditForm: FormGroup
   hirersList: Hirer[]
   editMode: boolean = false
+  isLoading = false
   constructor(
     private route: ActivatedRoute,
     private housesService: HousesService,
@@ -28,11 +29,28 @@ export class HouseEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((parammap) => {
-      this.houseId = +parammap.get('houseId')
+      this.houseId = parammap.get('houseId')
       this.editMode = parammap.get('houseId') != null
-      this.house = this.housesService.getHouseById(this.houseId)
     })
+    if (this.editMode) {
+      this.housesService.getHouseById(this.houseId).subscribe((house) => {
+        const newHouse = new House(
+          house['objectId'],
+          house['name'],
+          house['address'],
+          house['rentAmount'],
+          house['hirerId']
+        )
+
+        this.house = newHouse
+
+        this.initForm()
+        this.isLoading = false
+      })
+    }
+
     this.hirersList = this.hirersService.getAvailableHirers(this.houseId)
+
     this.subs = this.hirersService.hirersChanged.subscribe((hirers) => {
       this.hirersList = this.hirersService.getAvailableHirers(this.houseId)
     })
@@ -44,19 +62,25 @@ export class HouseEditComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
     if (this.editMode) {
-      this.housesService.updateHouse(this.house, this.houseEditForm.value)
-      this.hirersService.setHouseOfHirer(
-        +this.houseEditForm.value['hirer'],
-        this.house.id
-      )
+      this.housesService
+        .updateHouse(this.house, this.houseEditForm.value)
+        .subscribe(() => {
+          this.hirersService.setHouseOfHirer(
+            this.houseEditForm.value['hirer'],
+            this.house.id
+          )
+          this.onCloseCard()
+        })
     } else {
-      this.housesService.newHouse(this.houseEditForm.value)
-      this.hirersService.setHouseOfHirer(
-        +this.houseEditForm.value['hirer'],
-        this.housesService.getMaxIdOfHouses() + 1
-      )
+      this.housesService.addHouse(this.houseEditForm.value).subscribe(() => {
+        this.houseEditForm.reset()
+        this.hirersService.setHouseOfHirer(
+          this.houseEditForm.value['hirer'],
+          ''
+        )
+        this.onCloseCard()
+      })
     }
-    this.onCloseCard()
   }
 
   initForm() {

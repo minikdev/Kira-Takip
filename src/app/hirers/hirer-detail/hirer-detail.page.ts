@@ -12,7 +12,7 @@ import { HousesService } from '../../houses/houses.service'
 })
 export class HirerDetailPage implements OnInit {
   subscription: Subscription
-  hirerId: number
+  hirerId: string
   hirer: Hirer
   rentAmount: number = 0
   constructor(
@@ -27,7 +27,7 @@ export class HirerDetailPage implements OnInit {
       if (!paramMap.has('hirerId')) {
         return
       }
-      this.hirerId = +paramMap.get('hirerId')
+      this.hirerId = paramMap.get('hirerId')
       this.hirer = this.hirersService.getHirerById(this.hirerId)
       if (this.housesService.getHouseByHirerId(this.hirerId)) {
         this.rentAmount = this.housesService.getHouseByHirerId(

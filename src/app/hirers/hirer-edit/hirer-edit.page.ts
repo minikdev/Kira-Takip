@@ -12,7 +12,7 @@ import { HirersService } from '../hirers.service'
 })
 export class HirerEditPage implements OnInit {
   hirer: Hirer
-  hirerId: number
+  hirerId: string
   subs: Subscription
   hirerEditForm: FormGroup
 
@@ -25,7 +25,7 @@ export class HirerEditPage implements OnInit {
 
   ngOnInit(): void {
     this.subs = this.route.paramMap.subscribe((parammap) => {
-      this.hirerId = +parammap.get('hirerId')
+      this.hirerId = parammap.get('hirerId')
       this.hirer = this.hirersService.getHirerById(this.hirerId)
     })
 
