@@ -8,15 +8,12 @@ import { HirerEditPageRoutingModule } from './hirer-edit-routing.module'
 
 import { HirerEditPage } from './hirer-edit.page'
 import { HirerDetailPageModule } from '../hirer-detail/hirer-detail.module'
-import { RentTableComponent } from '../hirer-detail/rents/rents-table/rent-table.component'
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
     HirerEditPageRoutingModule,
-    ReactiveFormsModule,
     HirerDetailPageModule,
   ],
   declarations: [HirerEditPage],

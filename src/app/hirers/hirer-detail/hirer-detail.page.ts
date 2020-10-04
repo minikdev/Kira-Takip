@@ -15,6 +15,7 @@ export class HirerDetailPage implements OnInit {
   hirerId: string
   hirer: Hirer
   rentAmount: number = 0
+  isLoading = false
   constructor(
     private route: ActivatedRoute,
     private hirersService: HirersService,
@@ -28,12 +29,25 @@ export class HirerDetailPage implements OnInit {
         return
       }
       this.hirerId = paramMap.get('hirerId')
-      this.hirer = this.hirersService.getHirerById(this.hirerId)
-      if (this.housesService.getHouseByHirerId(this.hirerId)) {
-        this.rentAmount = this.housesService.getHouseByHirerId(
-          this.hirerId
-        ).rentAmount
-      }
+      this.isLoading = true
+      this.hirersService.getHirerById(this.hirerId).subscribe((hirer) => {
+        this.hirer = new Hirer(
+          hirer['objectId'],
+          hirer['tcNo'],
+          hirer['name'],
+          hirer['surname'],
+          hirer['phone'],
+          hirer['debt'],
+          hirer['houseId']
+        )
+
+        this.housesService
+          .getHouseById(this.hirer.houseId)
+          .subscribe((house) => {
+            this.rentAmount = house['rentAmount']
+          })
+        this.isLoading = false
+      })
     })
   }
 

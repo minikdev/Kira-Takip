@@ -9,18 +9,21 @@ import { HirerDetailPageRoutingModule } from './hirer-detail-routing.module'
 import { HirerDetailPage } from './hirer-detail.page'
 import { NewRentComponent } from './rents/new-rent/new-rent.component'
 import { RentTableComponent } from './rents/rents-table/rent-table.component'
-import { HttpClient } from '@angular/common/http'
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
+
     IonicModule,
     HirerDetailPageRoutingModule,
     ReactiveFormsModule,
-    HttpClient,
   ],
   declarations: [HirerDetailPage, RentTableComponent, NewRentComponent],
-  exports: [RentTableComponent, NewRentComponent],
+  exports: [
+    RentTableComponent,
+    NewRentComponent,
+    ReactiveFormsModule,
+    FormsModule,
+  ],
 })
 export class HirerDetailPageModule {}

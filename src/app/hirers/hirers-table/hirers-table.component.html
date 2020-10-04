@@ -1,7 +1,7 @@
 <router-outlet></router-outlet>
-<ion-list>
-  <ion-item-sliding *ngFor="let hirer of hirers" (click)="onSelectHirer(hirer)">
-    <ion-item>
+<ion-list *ngIf="!isLoading">
+  <ion-item-sliding *ngFor="let hirer of hirers">
+    <ion-item (click)="onSelectHirer(hirer.id)">
       <ion-label> {{ hirer.name + ' ' + hirer.surname }}</ion-label>
     </ion-item>
     <ion-item-options>
@@ -12,3 +12,4 @@
     </ion-item-options>
   </ion-item-sliding>
 </ion-list>
+<ion-spinner *ngIf="isLoading"></ion-spinner>

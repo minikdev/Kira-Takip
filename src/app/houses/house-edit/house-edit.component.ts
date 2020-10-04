@@ -31,30 +31,13 @@ export class HouseEditComponent implements OnInit, OnDestroy {
     this.route.paramMap.subscribe((parammap) => {
       this.houseId = parammap.get('houseId')
       this.editMode = parammap.get('houseId') != null
+      this.hirersService
+        .getAvailableHirers(this.houseId)
+        .subscribe((availableHirers) => {
+          this.hirersList = availableHirers
+        })
+      this.initForm()
     })
-    if (this.editMode) {
-      this.housesService.getHouseById(this.houseId).subscribe((house) => {
-        const newHouse = new House(
-          house['objectId'],
-          house['name'],
-          house['address'],
-          house['rentAmount'],
-          house['hirerId']
-        )
-
-        this.house = newHouse
-
-        this.initForm()
-        this.isLoading = false
-      })
-    }
-
-    this.hirersList = this.hirersService.getAvailableHirers(this.houseId)
-
-    this.subs = this.hirersService.hirersChanged.subscribe((hirers) => {
-      this.hirersList = this.hirersService.getAvailableHirers(this.houseId)
-    })
-    this.initForm()
   }
 
   onCloseCard() {
@@ -67,49 +50,71 @@ export class HouseEditComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.hirersService.setHouseOfHirer(
             this.houseEditForm.value['hirer'],
-            this.house.id
+            this.houseId
           )
           this.onCloseCard()
         })
     } else {
-      this.housesService.addHouse(this.houseEditForm.value).subscribe(() => {
-        this.houseEditForm.reset()
-        this.hirersService.setHouseOfHirer(
-          this.houseEditForm.value['hirer'],
-          ''
-        )
-        this.onCloseCard()
-      })
+      this.housesService
+        .addHouse(this.houseEditForm.value)
+        .subscribe((data) => {
+          this.housesService.Houses.subscribe((houses) => {
+            let houseId = houses.find(
+              (e) => e.name === this.houseEditForm.value.name
+            ).id
+            this.hirersService.setHouseOfHirer(
+              this.houseEditForm.value['hirer'],
+              houseId
+            )
+            this.onCloseCard()
+          })
+        })
     }
   }
 
   initForm() {
+    let houseName = ''
+    let houseAddress = ''
+    let houseRentAmount = 0
+
     if (this.editMode) {
-      this.houseEditForm = new FormGroup({
-        name: new FormControl(this.house.name, [Validators.required]),
-        address: new FormControl(this.house.address, Validators.required),
-        rentAmount: new FormControl(this.house.rentAmount, [
-          Validators.required,
-          Validators.pattern(/^[1-9]+[0-9]*$/),
-        ]),
-        hirer: new FormControl(null, Validators.required),
-      })
-    } else {
-      this.houseEditForm = new FormGroup({
-        name: new FormControl(null, [Validators.required]),
-        address: new FormControl(null, Validators.required),
-        rentAmount: new FormControl(null, [
-          Validators.required,
-          Validators.pattern(/^[1-9]+[0-9]*$/),
-        ]),
-        hirer: new FormControl(null, Validators.required),
+      this.housesService.getHouseById(this.houseId).subscribe((house) => {
+        const newHouse = new House(
+          house['objectId'],
+          house['name'],
+          house['address'],
+          house['rentAmount'],
+          house['hirerId']
+        )
+        this.house = newHouse
+        houseName = newHouse.name
+        houseAddress = newHouse.address
+        houseRentAmount = newHouse.rentAmount
+
+        this.houseEditForm = new FormGroup({
+          name: new FormControl(houseName, [Validators.required]),
+          address: new FormControl(houseAddress, Validators.required),
+          rentAmount: new FormControl(houseRentAmount, [
+            Validators.required,
+            Validators.pattern(/^[1-9]+[0-9]*$/),
+          ]),
+          hirer: new FormControl(null, Validators.required),
+        })
       })
     }
+
+    this.houseEditForm = new FormGroup({
+      name: new FormControl(houseName, [Validators.required]),
+      address: new FormControl(houseAddress, Validators.required),
+      rentAmount: new FormControl(houseRentAmount, [
+        Validators.required,
+        Validators.pattern(/^[1-9]+[0-9]*$/),
+      ]),
+      hirer: new FormControl(null, Validators.required),
+    })
   }
   getHirerController() {
     return this.houseEditForm.get('hirer')
   }
-  ngOnDestroy() {
-    this.subs.unsubscribe()
-  }
+  ngOnDestroy() {}
 }

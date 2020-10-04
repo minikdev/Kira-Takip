@@ -87,8 +87,6 @@ export class HousesService {
       hirer: string
     }
   ) {
-    console.log(house)
-
     let updatedHouses: House[] = []
     return this.http
       .put(`https://parseapi.back4app.com/classes/houses/${house.id}`, {

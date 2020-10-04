@@ -31,10 +31,22 @@ export class RentTableComponent implements OnInit {
   ngOnInit() {
     this.routeSubscription = this.route.paramMap.subscribe((paramMap) => {
       this.hirerId = paramMap.get('hirerId')
-      this.hirer = this.hirersService.getHirerById(this.hirerId)
-      if (this.housesService.getHouseByHirerId(this.hirerId)) {
-        this.houseName = this.housesService.getHouseByHirerId(this.hirerId).name
-      }
+      this.hirersService
+        .getHirerById(this.hirerId)
+        .subscribe((hirer: Hirer) => {
+          this.hirer = new Hirer(
+            hirer['objectId'],
+            hirer['tcNo'],
+            hirer['name'],
+            hirer['surname'],
+            hirer['phone'],
+            hirer['debt'],
+            hirer['houseId']
+          )
+        })
+      this.housesService.getHouseById(this.hirer.houseId).subscribe((data) => {
+        this.houseName = data['name']
+      })
     })
     this.rents = this.rentsService.prepareRentsArray(this.hirerId)
     this.rentServiceSubscription = this.rentsService.rentsChanged.subscribe(

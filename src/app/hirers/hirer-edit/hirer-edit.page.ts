@@ -15,7 +15,7 @@ export class HirerEditPage implements OnInit {
   hirerId: string
   subs: Subscription
   hirerEditForm: FormGroup
-
+  isLoading = false
   constructor(
     private route: ActivatedRoute,
 
@@ -26,18 +26,32 @@ export class HirerEditPage implements OnInit {
   ngOnInit(): void {
     this.subs = this.route.paramMap.subscribe((parammap) => {
       this.hirerId = parammap.get('hirerId')
-      this.hirer = this.hirersService.getHirerById(this.hirerId)
+      this.isLoading = true
+      this.hirersService.getHirerById(this.hirerId).subscribe((hirer) => {
+        this.hirer = new Hirer(
+          hirer['objectId'],
+          hirer['tcNo'],
+          hirer['name'],
+          hirer['surname'],
+          hirer['phone'],
+          hirer['debt,'],
+          hirer['houseId']
+        )
+        this.initForm()
+        this.isLoading = false
+      })
     })
-
-    this.initForm()
   }
 
   onCloseCard() {
     this.router.navigate(['tabs', 'hirers', this.hirerId])
   }
   onSubmit() {
-    this.hirersService.updateHirer(this.hirer, this.hirerEditForm.value)
-    this.onCloseCard()
+    this.hirersService
+      .updateHirer(this.hirer.id, this.hirerEditForm.value)
+      .subscribe(() => {
+        this.onCloseCard()
+      })
   }
   initForm() {
     this.hirerEditForm = new FormGroup({

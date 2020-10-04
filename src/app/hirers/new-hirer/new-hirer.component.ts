@@ -29,8 +29,9 @@ export class NewHirerComponent implements OnInit {
   }
 
   onSubmit() {
-    this.hirersService.newHirer(this.newHirerForm.value)
-    this.onCloseCard()
+    this.hirersService.addHirer(this.newHirerForm.value).subscribe(() => {
+      this.onCloseCard()
+    })
   }
   onCloseCard() {
     this.router.navigate(['tabs', 'hirers'])

@@ -12,16 +12,16 @@ export class HirersTableComponent implements OnInit {
   subscription: Subscription
   newHirerSubscription: Subscription
   hirers: Hirer[] = []
-  constructor(
-    private hirersService: HirersService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  isLoading = false
+  constructor(private hirersService: HirersService, private router: Router) {}
 
   ngOnInit() {
-    this.hirers = this.hirersService.getHirers()
+    // this.hirers = this.hirersService.getHirers()
 
-    this.subscription = this.hirersService.hirersChanged.subscribe((hirers) => {
+    this.hirersService.fetchHirers().subscribe(() => {
+      this.isLoading = false
+    })
+    this.hirersService.Hirers.subscribe((hirers) => {
       this.hirers = hirers
     })
     this.newHirerSubscription = this.hirersService.onNewHirer.subscribe(
@@ -36,12 +36,15 @@ export class HirersTableComponent implements OnInit {
     this.router.navigate(['tabs', 'hirers', 'new'])
   }
   onDeleteHirer(hirer: Hirer) {
-    this.hirersService.deleteHirer(hirer)
+    this.isLoading = true
+    this.hirersService.deleteHirer(hirer.id).subscribe(() => {
+      this.isLoading = false
+    })
   }
 
-  onSelectHirer(hirer: Hirer) {
-    this.router.navigate(['tabs', 'hirers', hirer.id], {
-      state: { hirerId: hirer.id },
+  onSelectHirer(hirerId: string) {
+    this.router.navigate(['tabs', 'hirers', hirerId], {
+      state: { hirerId: hirerId },
     })
   }
 

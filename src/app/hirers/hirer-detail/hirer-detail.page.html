@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="!isLoading">
     <ion-card-header>
       <ion-card-title> {{hirer.name+" "+hirer.surname}} </ion-card-title>
     </ion-card-header>
@@ -23,6 +23,7 @@
       </ion-buttons>
     </ion-card-content>
   </ion-card>
-  <router-outlet></router-outlet>
-  <app-rent-table></app-rent-table>
+  <ion-spinner *ngIf="isLoading"></ion-spinner>
+  <!-- <router-outlet></router-outlet> -->
+  <!-- <app-rent-table></app-rent-table> -->
 </ion-content>

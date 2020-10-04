@@ -12,15 +12,12 @@ import { HousesTableComponent } from './houses-table/houses-table.component'
 import { HouseDetailComponent } from './house-detail/house-detail.component'
 import { HouseEditComponent } from './house-edit/house-edit.component'
 
-import { NgxDatatableModule } from '@swimlane/ngx-datatable'
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     HousesPageRoutingModule,
-    NgxDatatableModule,
     ReactiveFormsModule,
   ],
   declarations: [
