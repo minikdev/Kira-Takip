@@ -54,13 +54,8 @@ export class HousesService {
       .pipe(take(1))
   }
 
-  getHouseByHirerId(hirerId: string) {
-    for (let index = this.houses.length - 1; index >= 0; index--) {
-      if (hirerId === this.houses[index].hirerId) {
-        return this.houses[index]
-      }
-    }
-    return null
+  getHouseByHirerId() {
+    return this.http.get(`https://parseapi.back4app.com/classes/houses`)
   }
 
   deleteHouse(houseId: string) {

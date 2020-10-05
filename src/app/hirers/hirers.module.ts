@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { IonicModule } from '@ionic/angular'
 
 import { HirersPageRoutingModule } from './hirers-routing.module'
-
 import { HirersPage } from './hirers.page'
 import { HeaderComponent } from '../shared/header/header.component'
 import { HirersTableComponent } from './hirers-table/hirers-table.component'

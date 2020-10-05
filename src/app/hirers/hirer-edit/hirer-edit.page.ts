@@ -34,7 +34,7 @@ export class HirerEditPage implements OnInit {
           hirer['name'],
           hirer['surname'],
           hirer['phone'],
-          hirer['debt,'],
+          hirer['debt'],
           hirer['houseId']
         )
         this.initForm()

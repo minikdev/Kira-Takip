@@ -153,17 +153,6 @@ export class HirersService {
       debt: number
     }
   ) {
-    // var newHirer = new Hirer(
-    //   hirer.id,
-    //   formsValue.tcNo,
-    //   formsValue.name,
-    //   formsValue.surname,
-    //   formsValue.phone,
-    //   formsValue.debt
-    // )
-    // this.hirers[this.hirers.indexOf(hirer, 0)] = newHirer
-    // this.sendNewHirers()
-
     let updatedHirers: Hirer[] = []
     return this.http
       .put(`https://parseapi.back4app.com/classes/hirers/${hirerId}`, {
@@ -257,17 +246,33 @@ export class HirersService {
   //   }
   //   return max
   // }
-
+  //Update
   addDebtToHirer(hirerId: string, debt: number) {
-    for (const hirer of this.hirers) {
-      if (hirerId === hirer.id) {
-        if (hirer.debt === undefined) {
-          hirer.debt = 0
-        }
+    let updatedHirers: Hirer[] = []
+    return this.http
+      .put(`https://parseapi.back4app.com/classes/hirers/${hirerId}`, {
+        debt: debt,
+      })
+      .pipe(
+        take(1),
+        switchMap(() => {
+          return this.Hirers
+        }),
+        take(1),
+        tap((hirers) => {
+          const updatedHirerIndex = hirers.findIndex((h) => h.id === hirerId)
+          updatedHirers = [...hirers]
+          updatedHirers[updatedHirerIndex] = new Hirer(
+            hirerId,
+            hirers[updatedHirerIndex].tcNo,
+            hirers[updatedHirerIndex].name,
+            hirers[updatedHirerIndex].surname,
+            hirers[updatedHirerIndex].phone,
+            debt
+          )
 
-        hirer.debt += debt
-      }
-    }
-    this.sendNewHirers()
+          this._Hirers.next(updatedHirers)
+        })
+      )
   }
 }

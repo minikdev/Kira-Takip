@@ -29,36 +29,43 @@ export class NewRentComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subscription = this.route.parent.paramMap.subscribe((paramMap) => {
       this.hirerId = paramMap.get('hirerId')
-      this.house = this.housesService.getHouseByHirerId(this.hirerId)
-      if (this.house) {
-        this.rentAmount = this.house.rentAmount
-      }
+
+      this.housesService.getHouseByHirerId().subscribe((data) => {
+        data['results'].forEach((element) => {
+          if (element.hirerId === this.hirerId) {
+            this.rentAmount = element.rentAmount
+          }
+        })
+      })
+      this.initForm()
     })
-    this.initForm()
   }
 
   initForm() {
     this.newRentForm = new FormGroup({
       paidAmount: new FormControl(null, [
         Validators.required,
-        Validators.pattern(/^[1-9]+[0-9]*$/),
+        Validators.pattern(/^[0-9]+[0-9]*$/),
       ]),
-      payDate: new FormControl(new Date(), Validators.required),
+      payDate: new FormControl(null, Validators.required),
     })
   }
 
   onSubmit() {
-    this.rentsService.addRent(
-      this.hirerId,
-      this.house.id,
-      this.newRentForm.value['paidAmount'],
-      this.newRentForm.value['payDate']
-    )
-    this.hirersService.addDebtToHirer(
-      this.hirerId,
-      this.newRentForm.value['paidAmount'] - this.rentAmount
-    )
-    this.router.navigate(['tabs', 'hirers', this.hirerId])
+    let dateString = this.newRentForm.value['payDate'].split('T')[0]
+
+    this.rentsService
+      .addRent(this.hirerId, this.newRentForm.value['paidAmount'], dateString)
+      .subscribe()
+
+    this.hirersService
+      .addDebtToHirer(
+        this.hirerId,
+        this.newRentForm.value['paidAmount'] - this.rentAmount
+      )
+      .subscribe(() => {
+        this.router.navigate(['tabs', 'hirers', this.hirerId])
+      })
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe()

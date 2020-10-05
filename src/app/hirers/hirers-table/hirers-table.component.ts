@@ -16,8 +16,7 @@ export class HirersTableComponent implements OnInit {
   constructor(private hirersService: HirersService, private router: Router) {}
 
   ngOnInit() {
-    // this.hirers = this.hirersService.getHirers()
-
+    this.isLoading = true
     this.hirersService.fetchHirers().subscribe(() => {
       this.isLoading = false
     })

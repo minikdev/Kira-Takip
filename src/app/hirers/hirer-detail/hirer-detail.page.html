@@ -8,7 +8,7 @@
       <ion-grid>
         <ion-row>
           <ion-col>T.C: {{hirer.tcNo}} </ion-col>
-          <ion-col>Telefon: {{hirer.phone}} </ion-col>
+          <ion-col>Telefon: {{hirer.phone |phone}} </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>Kira Bedeli:{{ rentAmount}} </ion-col>
@@ -25,5 +25,5 @@
   </ion-card>
   <ion-spinner *ngIf="isLoading"></ion-spinner>
   <!-- <router-outlet></router-outlet> -->
-  <!-- <app-rent-table></app-rent-table> -->
+  <app-rent-table></app-rent-table>
 </ion-content>

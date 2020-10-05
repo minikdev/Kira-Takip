@@ -20,6 +20,7 @@ export class RentTableComponent implements OnInit {
   rentServiceSubscription: Subscription
   houseName: string = ''
   rents: Rent[] = []
+  isLoading = false
   constructor(
     private route: ActivatedRoute,
     private hirersService: HirersService,
@@ -43,17 +44,27 @@ export class RentTableComponent implements OnInit {
             hirer['debt'],
             hirer['houseId']
           )
+          this.housesService
+            .getHouseById(this.hirer.houseId)
+            .subscribe((data) => {
+              this.houseName = data['name']
+            })
         })
-      this.housesService.getHouseById(this.hirer.houseId).subscribe((data) => {
-        this.houseName = data['name']
+    })
+
+    this.isLoading = true
+    this.rentsService.fetchRents().subscribe(() => {
+      this.isLoading = false
+    })
+    this.rentsService.Rents.subscribe((rents) => {
+      this.rents = []
+      rents.forEach((e) => {
+        if (e.hirerId === this.hirerId) {
+          this.rents.push(e)
+        }
       })
     })
-    this.rents = this.rentsService.prepareRentsArray(this.hirerId)
-    this.rentServiceSubscription = this.rentsService.rentsChanged.subscribe(
-      (rents: Rent[]) => {
-        this.rents = rents
-      }
-    )
+
     this.newRentSubscription = this.rentsService.onNewRent.subscribe(
       (trueOrFalse) => {
         if (trueOrFalse) {
@@ -63,15 +74,17 @@ export class RentTableComponent implements OnInit {
     )
   }
 
-  onDeleteRent(rent: Rent) {
-    this.rentsService.deleteRent(rent, this.hirerId)
+  onDeleteRent(rentId: string) {
+    this.isLoading = true
+    this.rentsService.deleteRent(rentId).subscribe(() => {
+      this.isLoading = false
+    })
   }
 
   onNewRent() {
     this.router.navigate(['new'], { relativeTo: this.route })
   }
   ngOnDestroy() {
-    this.rentServiceSubscription.unsubscribe()
     this.routeSubscription.unsubscribe()
     this.newRentSubscription.unsubscribe()
   }

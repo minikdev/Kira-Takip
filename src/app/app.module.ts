@@ -10,6 +10,7 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 import { ApiKeyInterceptor } from './_helpers/ApiKey.interceptor'
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
