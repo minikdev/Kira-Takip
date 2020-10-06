@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-button (click)="onNewHirer()">
+      <ion-button (click)="onNewHirer()" *ngIf="hirerFlag">
         <ion-icon name="add-circle-outline"></ion-icon>Kiracı
       </ion-button>
     </ion-buttons>
     <ion-title> {{title}}</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="onNewRent()">
+      <ion-button (click)="onNewRent()" *ngIf="rentFlag">
         <ion-icon name="add-circle-outline"></ion-icon>Kira
       </ion-button>
     </ion-buttons>

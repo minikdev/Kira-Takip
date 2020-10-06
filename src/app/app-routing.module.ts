@@ -14,7 +14,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'houses',
+        redirectTo: 'hirers',
         pathMatch: 'full',
       },
       {

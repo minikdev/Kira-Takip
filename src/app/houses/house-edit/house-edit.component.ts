@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { ActivatedRoute, Router, Params } from '@angular/router'
-import { Subscription } from 'rxjs'
+import { ActivatedRoute, Router } from '@angular/router'
 import { Hirer } from 'src/app/hirers/hirer.model'
 import { HirersService } from 'src/app/hirers/hirers.service'
 import { House } from '../house.model'
@@ -12,10 +11,9 @@ import { HousesService } from '../houses.service'
   templateUrl: './house-edit.component.html',
   styleUrls: ['./house-edit.component.scss'],
 })
-export class HouseEditComponent implements OnInit, OnDestroy {
+export class HouseEditComponent implements OnInit {
   house: House
   houseId: string
-  subs: Subscription
   houseEditForm: FormGroup
   hirersList: Hirer[]
   editMode: boolean = false
@@ -29,6 +27,7 @@ export class HouseEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((parammap) => {
+      this.isLoading = true
       this.houseId = parammap.get('houseId')
       this.editMode = parammap.get('houseId') != null
       this.hirersService
@@ -37,12 +36,10 @@ export class HouseEditComponent implements OnInit, OnDestroy {
           this.hirersList = availableHirers
         })
       this.initForm()
+      this.isLoading = false
     })
   }
 
-  onCloseCard() {
-    this.router.navigate(['tabs', 'houses'])
-  }
   onSubmit() {
     if (this.editMode) {
       this.housesService
@@ -113,8 +110,8 @@ export class HouseEditComponent implements OnInit, OnDestroy {
       hirer: new FormControl(null, Validators.required),
     })
   }
-  getHirerController() {
-    return this.houseEditForm.get('hirer')
+
+  onCloseCard() {
+    this.router.navigate(['tabs', 'houses'])
   }
-  ngOnDestroy() {}
 }

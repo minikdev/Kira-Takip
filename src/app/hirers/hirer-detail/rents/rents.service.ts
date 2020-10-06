@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Subject } from 'rxjs'
-import { Hirer } from '../../hirer.model'
 import { Rent } from './rent.model'
 
 import { map, switchMap, tap, take } from 'rxjs/operators'
@@ -13,17 +12,14 @@ export class RentsService {
   private _Rents = new BehaviorSubject<Rent[]>([])
   onNewRent = new Subject<boolean>()
   rentsChanged = new Subject<Rent[]>()
-  getRents() {
-    return [...this.rents]
-  }
+
+  constructor(private http: HttpClient) {}
 
   get Rents() {
     return this._Rents
   }
-  constructor(private http: HttpClient) {}
 
   fetchRents() {
-    // çalıştı
     return this.http.get('https://parseapi.back4app.com/classes/rents').pipe(
       take(1),
       map((data) => {
@@ -40,20 +36,6 @@ export class RentsService {
         this._Rents.next(rents)
       })
     )
-  }
-  prepareRentsArray(hirerId: string) {
-    var individualRents: Rent[] = []
-    for (let rent of this.rents) {
-      if (rent.hirerId === hirerId) {
-        individualRents.push(rent)
-      }
-    }
-    return individualRents
-  }
-
-  getIndexOfARent(rent: Rent, hirerId: string): number {
-    var individualRents = this.prepareRentsArray(hirerId)
-    return individualRents.indexOf(rent, 0)
   }
 
   deleteRent(rentId: string) {
@@ -85,7 +67,7 @@ export class RentsService {
           return this.Rents
         }),
         take(1),
-        tap((houses) => {
+        tap(() => {
           let newRent = new Rent(id, hirerId, paidAmount, new Date(payDate))
           this._Rents.next(this.rents.concat(newRent))
         })

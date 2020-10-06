@@ -11,10 +11,11 @@ import { HousesService } from '../houses.service'
 })
 export class HousesTableComponent implements OnInit, OnDestroy {
   houses: House[]
-  subscription: Subscription
-  constructor(private housesService: HousesService, private router: Router) {}
   newHouseSubscription: Subscription
   isLoading = false
+
+  constructor(private housesService: HousesService, private router: Router) {}
+
   ngOnInit() {
     this.newHouseSubscription = this.housesService.onNewHouse.subscribe(
       (trueorFalse) => {
@@ -45,7 +46,6 @@ export class HousesTableComponent implements OnInit, OnDestroy {
     })
   }
   ngOnDestroy() {
-    this.subscription.unsubscribe()
     this.newHouseSubscription.unsubscribe()
   }
 }

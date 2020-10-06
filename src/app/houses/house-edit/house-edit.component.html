@@ -1,5 +1,5 @@
-<ion-card *ngIf="!isLoading">
-  <form (ngSubmit)="onSubmit()" [formGroup]="houseEditForm">
+<ion-card>
+  <form (ngSubmit)="onSubmit()" [formGroup]="houseEditForm" *ngIf="!isLoading">
     <ion-card-header>
       <ion-card-title>
         <ion-input formControlName="name" placeholder="Ad"></ion-input>
@@ -24,7 +24,7 @@
                 ngDefaultControl
                 *ngFor="let hirer of hirersList"
                 [value]="hirer.id"
-                >{{ hirer.name }}</ion-select-option
+                >{{ hirer.name + ' ' + hirer.surname }}</ion-select-option
               >
             </ion-select>
           </ion-col>
@@ -49,4 +49,5 @@
       </ion-buttons>
     </ion-card-content>
   </form>
+  <ion-spinner *ngIf="isLoading"></ion-spinner>
 </ion-card>

@@ -29,27 +29,6 @@ const routes: Routes = [
       },
     ],
   },
-  // {
-  //   path: ':hirerId',
-  //   component: HirerDetailComponent,
-  //   children: [
-  //     {
-  //       path: 'edit',
-  //       component: HirerEditComponent,
-  //     },
-  //     {
-  //       path: 'new',
-  //       component: NewRentComponent,
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: ':hirerId',
-  //   loadChildren: () =>
-  //     import('../demopage/demopage.module').then(
-  //       (m) => m.DemopagePageModule
-  //     ),
-  // },
 ]
 
 @NgModule({

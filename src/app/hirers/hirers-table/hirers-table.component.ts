@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
+import { Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { Hirer } from '../hirer.model'
 import { HirersService } from '../hirers.service'
@@ -9,7 +9,6 @@ import { HirersService } from '../hirers.service'
   styleUrls: ['./hirers-table.component.scss'],
 })
 export class HirersTableComponent implements OnInit {
-  subscription: Subscription
   newHirerSubscription: Subscription
   hirers: Hirer[] = []
   isLoading = false
@@ -31,9 +30,11 @@ export class HirersTableComponent implements OnInit {
       }
     )
   }
+
   onNewHirer() {
     this.router.navigate(['tabs', 'hirers', 'new'])
   }
+
   onDeleteHirer(hirer: Hirer) {
     this.isLoading = true
     this.hirersService.deleteHirer(hirer.id).subscribe(() => {
@@ -45,9 +46,6 @@ export class HirersTableComponent implements OnInit {
     this.router.navigate(['tabs', 'hirers', hirerId], {
       state: { hirerId: hirerId },
     })
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe()
+    this.hirersService.onSelectHirer.next(true)
   }
 }

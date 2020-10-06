@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core'
 import { House } from './house.model'
-import { HirersService } from '../hirers/hirers.service'
-import { Hirer } from '../hirers/hirer.model'
-import { BehaviorSubject, of, Subject } from 'rxjs'
+import { BehaviorSubject, Subject } from 'rxjs'
 import { map, switchMap, tap, take } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 
@@ -10,7 +8,6 @@ import { HttpClient } from '@angular/common/http'
   providedIn: 'root',
 })
 export class HousesService {
-  hirers: Hirer[]
   private houses: House[] = []
   private _Houses = new BehaviorSubject<House[]>([])
   onNewHouse = new Subject<boolean>()
@@ -18,9 +15,7 @@ export class HousesService {
   get Houses() {
     return this._Houses.asObservable()
   }
-  constructor(private hirersService: HirersService, private http: HttpClient) {
-    this.hirers = this.hirersService.getHirers()
-  }
+  constructor(private http: HttpClient) {}
 
   fetchHouses() {
     // çalıştı
@@ -42,10 +37,6 @@ export class HousesService {
         this._Houses.next(houses)
       })
     )
-  }
-
-  getHouse(index: number) {
-    return this.houses[index]
   }
 
   getHouseById(houseId: string) {

@@ -53,6 +53,7 @@ export class HirerDetailPage implements OnInit {
 
   onCloseCard() {
     this.router.navigate(['tabs', 'hirers'])
+    this.hirersService.onSelectHirer.next(false)
   }
   onEdit() {
     this.router.navigate(['tabs', 'hirers', this.hirerId, 'edit'])

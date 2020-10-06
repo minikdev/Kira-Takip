@@ -8,48 +8,16 @@ import { Hirer } from './hirer.model'
   providedIn: 'root',
 })
 export class HirersService {
-  hirersChanged = new Subject<Hirer[]>()
   onNewHirer = new Subject<boolean>()
-  private hirers: Hirer[] = [
-    new Hirer('0', '123123', 'Minik', 'Engin', '5448881899', undefined, '0'),
-    new Hirer(
-      '1',
-      '12312312123',
-      'Minik2',
-      'Engin',
-      '5448881899',
-      undefined,
-      '1'
-    ),
-    new Hirer(
-      '2',
-      '1231241243',
-      'Minik3',
-      'Engin',
-      '5448881899',
-      undefined,
-      '2'
-    ),
-    new Hirer(
-      '3',
-      '12312312123',
-      'Minik4',
-      'Engin',
-      '5448881899',
-      undefined,
-      '3'
-    ),
-    new Hirer('4', '12323', 'Minik5', 'Engin', '5448881899'),
-  ]
+  onSelectHirer = new Subject<boolean>()
   private _Hirers = new BehaviorSubject<Hirer[]>([])
-
+  private oldHirer: Hirer
   constructor(private http: HttpClient) {}
 
   get Hirers() {
     return this._Hirers
   }
   fetchHirers() {
-    // çalıştı
     return this.http.get('https://parseapi.back4app.com/classes/hirers').pipe(
       take(1),
       map((data) => {
@@ -72,10 +40,7 @@ export class HirersService {
       })
     )
   }
-  getHirers() {
-    return this.hirers.slice()
-  }
-  // ON NEW HOUSE
+
   getAvailableHirers(houseId: string) {
     let availableHirers: Hirer[] = []
     return this.http
@@ -88,47 +53,60 @@ export class HirersService {
             if (
               !element.hasOwnProperty('houseId') ||
               (element.hasOwnProperty('houseId') &&
-                element['houseId'] === houseId)
+                element['houseId'] === houseId) ||
+              (element.hasOwnProperty('houseId') && element['houseId'] === null)
             ) {
-              availableHirers.push(
-                new Hirer(
-                  element['objectId'],
-                  element['tcNo'],
-                  element['name'],
-                  element['surname'],
-                  element['phone'],
-                  element['debt']
-                )
+              let newHirer = new Hirer(
+                element['objectId'],
+                element['tcNo'],
+                element['name'],
+                element['surname'],
+                element['phone'],
+                element['debt']
               )
+              if (element['houseId'] === houseId) {
+                this.oldHirer = newHirer
+              }
+              availableHirers.push(newHirer)
             }
           })
           return availableHirers
         })
       )
-    // for (const hirer of this.hirers) {
-    //   if (hirer.houseId === undefined || hirer.houseId === houseId) {
-    //     availableHirers.push(hirer)
-    //   }
-    // }
-    // return availableHirers
-  }
-  getHirer(index: number) {
-    return this.hirers[index]
   }
 
   getHirerById(hirerId: string) {
-    //çalıştı
     return this.http
       .get(`https://parseapi.back4app.com/classes/hirers/${hirerId}`)
       .pipe(take(1))
   }
+
   setHouseOfHirer(hirerId: string, houseId: string) {
+    this.cleanHouseOfOldHirer()
+
     this.http
       .put(`https://parseapi.back4app.com/classes/hirers/${hirerId}`, {
         houseId: houseId,
       })
-      .subscribe()
+      .subscribe((data) => {
+        console.log(data, 'sethouseofhirer data')
+      })
   }
+
+  cleanHouseOfOldHirer() {
+    console.log(this.oldHirer)
+    if (this.oldHirer) {
+      this.http
+        .put(
+          `https://parseapi.back4app.com/classes/hirers/${this.oldHirer.id}`,
+          {
+            houseId: null,
+          }
+        )
+        .subscribe()
+    }
+  }
+
   deleteHirer(hirerId: string) {
     // çalıştı
     return this.http
@@ -143,6 +121,7 @@ export class HirersService {
         })
       )
   }
+
   updateHirer(
     hirerId: string,
     formsValue: {
@@ -220,33 +199,8 @@ export class HirersService {
           this._Hirers.next(hirers.concat(newHirer))
         })
       )
-
-    // this.hirers.push(
-    //   new Hirer(
-    //     Math.random().toString(),
-    //     formsValue.tcNo,
-    //     formsValue.name,
-    //     formsValue.surname,
-    //     formsValue.phone,
-    //     formsValue.debt
-    //   )
-    // )
-    // this.sendNewHirers()
   }
 
-  sendNewHirers() {
-    this.hirersChanged.next([...this.hirers])
-  }
-  // getMaxId() {
-  //   let max: number = -1
-  //   for (const hirer of this.hirers) {
-  //     if (max < hirer.id) {
-  //       max = hirer.id
-  //     }
-  //   }
-  //   return max
-  // }
-  //Update
   addDebtToHirer(hirerId: string, debt: number) {
     let updatedHirers: Hirer[] = []
     return this.http
