@@ -3,11 +3,11 @@ import { Router } from '@angular/router'
 import { NavController } from '@ionic/angular'
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  selector: 'app-tabs',
+  templateUrl: './tabs.component.html',
+  styleUrls: ['./tabs.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class TabsComponent implements OnInit {
   constructor(private router: Router, private navCtrl: NavController) {}
 
   ngOnInit() {}

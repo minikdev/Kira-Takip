@@ -28,6 +28,7 @@ export class HirerDetailPage implements OnInit {
       if (!paramMap.has('hirerId')) {
         return
       }
+
       this.hirerId = paramMap.get('hirerId')
       this.isLoading = true
       this.hirersService.getHirerById(this.hirerId).subscribe((hirer) => {

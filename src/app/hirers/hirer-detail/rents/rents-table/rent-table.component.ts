@@ -58,6 +58,7 @@ export class RentTableComponent implements OnInit {
     })
     this.rentsService.Rents.subscribe((rents) => {
       this.rents = []
+
       rents.forEach((e) => {
         if (e.hirerId === this.hirerId) {
           this.rents.push(e)

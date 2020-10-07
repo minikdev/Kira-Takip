@@ -6,7 +6,7 @@ import { IonicModule } from '@ionic/angular'
 
 import { HirersPageRoutingModule } from './hirers-routing.module'
 import { HirersPage } from './hirers.page'
-import { HeaderComponent } from '../shared/header/header.component'
+import { TabsComponent } from '../shared/tabs/tabs.component'
 import { HirersTableComponent } from './hirers-table/hirers-table.component'
 import { NewHirerComponent } from './new-hirer/new-hirer.component'
 @NgModule({
@@ -19,7 +19,7 @@ import { NewHirerComponent } from './new-hirer/new-hirer.component'
   ],
   declarations: [
     HirersPage,
-    HeaderComponent,
+    TabsComponent,
     HirersTableComponent,
     NewHirerComponent,
   ],

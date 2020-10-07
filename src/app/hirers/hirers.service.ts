@@ -88,13 +88,10 @@ export class HirersService {
       .put(`https://parseapi.back4app.com/classes/hirers/${hirerId}`, {
         houseId: houseId,
       })
-      .subscribe((data) => {
-        console.log(data, 'sethouseofhirer data')
-      })
+      .subscribe()
   }
 
   cleanHouseOfOldHirer() {
-    console.log(this.oldHirer)
     if (this.oldHirer) {
       this.http
         .put(
@@ -216,6 +213,7 @@ export class HirersService {
         tap((hirers) => {
           const updatedHirerIndex = hirers.findIndex((h) => h.id === hirerId)
           updatedHirers = [...hirers]
+
           updatedHirers[updatedHirerIndex] = new Hirer(
             hirerId,
             hirers[updatedHirerIndex].tcNo,

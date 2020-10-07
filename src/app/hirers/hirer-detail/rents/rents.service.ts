@@ -8,7 +8,6 @@ import { map, switchMap, tap, take } from 'rxjs/operators'
   providedIn: 'root',
 })
 export class RentsService {
-  private rents: Rent[] = []
   private _Rents = new BehaviorSubject<Rent[]>([])
   onNewRent = new Subject<boolean>()
   rentsChanged = new Subject<Rent[]>()
@@ -67,9 +66,9 @@ export class RentsService {
           return this.Rents
         }),
         take(1),
-        tap(() => {
+        tap((rents) => {
           let newRent = new Rent(id, hirerId, paidAmount, new Date(payDate))
-          this._Rents.next(this.rents.concat(newRent))
+          this._Rents.next(rents.concat(newRent))
         })
       )
   }

@@ -8,7 +8,6 @@ import { HttpClient } from '@angular/common/http'
   providedIn: 'root',
 })
 export class HousesService {
-  private houses: House[] = []
   private _Houses = new BehaviorSubject<House[]>([])
   onNewHouse = new Subject<boolean>()
 
@@ -45,7 +44,7 @@ export class HousesService {
       .pipe(take(1))
   }
 
-  getHouseByHirerId() {
+  getHouses() {
     return this.http.get(`https://parseapi.back4app.com/classes/houses`)
   }
 

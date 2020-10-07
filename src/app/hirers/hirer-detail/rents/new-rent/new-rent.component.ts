@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
+
 import { HirersService } from 'src/app/hirers/hirers.service'
 import { House } from 'src/app/houses/house.model'
 import { HousesService } from 'src/app/houses/houses.service'
@@ -16,6 +17,7 @@ export class NewRentComponent implements OnInit, OnDestroy {
   newRentForm: FormGroup
   subscription: Subscription
   hirerId: string
+  hirerDebt: number
   house: House
   rentAmount: number
   constructor(
@@ -30,12 +32,15 @@ export class NewRentComponent implements OnInit, OnDestroy {
     this.subscription = this.route.parent.paramMap.subscribe((paramMap) => {
       this.hirerId = paramMap.get('hirerId')
 
-      this.housesService.getHouseByHirerId().subscribe((data) => {
+      this.housesService.getHouses().subscribe((data) => {
         data['results'].forEach((element) => {
           if (element.hirerId === this.hirerId) {
             this.rentAmount = element.rentAmount
           }
         })
+      })
+      this.hirersService.getHirerById(this.hirerId).subscribe((hirer) => {
+        this.hirerDebt = +hirer['debt']
       })
       this.initForm()
     })
@@ -56,15 +61,16 @@ export class NewRentComponent implements OnInit, OnDestroy {
 
     this.rentsService
       .addRent(this.hirerId, this.newRentForm.value['paidAmount'], dateString)
-      .subscribe()
-
-    this.hirersService
-      .addDebtToHirer(
-        this.hirerId,
-        this.newRentForm.value['paidAmount'] - this.rentAmount
-      )
       .subscribe(() => {
-        this.router.navigate(['tabs', 'hirers', this.hirerId])
+        this.hirersService
+          .addDebtToHirer(
+            this.hirerId,
+            this.hirerDebt +
+              (this.newRentForm.value['paidAmount'] - this.rentAmount)
+          )
+          .subscribe(() => {
+            this.router.navigate(['tabs', 'hirers', this.hirerId])
+          })
       })
   }
   ngOnDestroy(): void {
